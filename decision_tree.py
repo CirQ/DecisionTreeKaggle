@@ -1,6 +1,8 @@
 import graphviz
 import numpy as np
 import pandas as pd
+import matplotlib.pyplot as plt
+import matplotlib.ticker as tic
 import sklearn
 from sklearn.decomposition import PCA
 from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
@@ -31,6 +33,16 @@ def data_transform(model, X, y, Xt):
     model = model.fit(X, y)
     return model.transform(X), model.transform(Xt)
 
+def display_features(X):
+    fig, axes = plt.subplots(nrows=2, ncols=3, figsize=(12,7))
+    for i, (name, column) in enumerate(X.iteritems()):
+        x, y = i / 3, i % 3
+        axes[x,y].hist(column)
+        axes[x,y].xaxis.set_major_locator(tic.MaxNLocator(4))
+        axes[x,y].set_title('#'+name)
+    fig.tight_layout()
+    fig.subplots_adjust(hspace=0.3, wspace=0.2)
+    plt.show()
 
 
 # firstly load the data
@@ -39,6 +51,8 @@ train_X, train_y = fetch_data('./train.csv')
 test_X = fetch_data('./test.csv', False)
 print 'Data loaded successfully'
 print '#'*80
+
+display_features(train_X)
 
 
 
