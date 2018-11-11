@@ -80,7 +80,7 @@ print '#'*80
 
 
 print 'Trying outlier detecting and filtering'
-lof = LocalOutlierFactor(530, metric='chebyshev', contamination='auto')
+lof = LocalOutlierFactor(500, metric='chebyshev', contamination='auto')
 train_X, train_y = outlier_filtering(lof, train_X, train_y)
 print train_X.shape[0], 'samples remain'
 print '#'*80
@@ -93,6 +93,15 @@ print lasso.coef_.tolist()
 print 'Plot features histogram'
 # display_features(train_X)
 print '#'*80
+
+
+# with open('clean_train.csv', 'w') as w:
+#     w.write('Attribute1,Attribute2,Attribute3,Attribute4,Attribute5,Attribute6,Category\n')
+#     for i in range(train_X.shape[0]):
+#         info = ','.join(map(str, train_X[i]))
+#         info += ',{:d}\n'.format(train_y[i])
+#         w.write(info)
+# exit()
 
 
 # try to preprocess the features
@@ -143,7 +152,7 @@ print '#'*80
 
 # try to analyze the generalization issue
 
-label = 'lof_lasso_hyper_real'
+label = 'lof_hyper_real'
 
 # dtc.fit(train_X, train_y)
 # pred_y = dtc.predict(test_X)
