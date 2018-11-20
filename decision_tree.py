@@ -143,8 +143,13 @@ dtc = DecisionTreeClassifier(
 
 
 print 'Start evaluating model...'
-score = cross_val_score(dtc, train_X, train_y, scoring='accuracy', cv=10)
-print 'The average accuracy:', np.mean(score)
+# score = cross_val_score(dtc, train_X, train_y, scoring='accuracy', cv=10)
+# print 'The average accuracy:', np.mean(score)
+real_y = pd.read_csv('test_label.csv').values.reshape(-1)
+dtc.fit(train_X, train_y)
+pred_y = dtc.predict(test_X)
+diff = (pred_y-real_y).astype(np.bool).sum()
+print 'The accuracy is', 1-diff/1000.0
 print '#'*80
 
 
@@ -154,8 +159,6 @@ print '#'*80
 
 label = 'lof_hyper_real'
 
-# dtc.fit(train_X, train_y)
-# pred_y = dtc.predict(test_X)
 # write_data(pred_y, label)
 # print 'Predicting data dumpped!'
 
