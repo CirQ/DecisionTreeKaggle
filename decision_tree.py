@@ -68,40 +68,51 @@ def brute_sample_select(model, X, y, threshold=0.7):
         if max_score > threshold:
             return max_score, scoring[max_score]
 
+def evaluate_accuracy(model, X, y, X_test=None):
+    if X_test is None:
+        accs = cross_val_score(model, X, y, scoring='accuracy', cv=10)
+        return None, np.mean(accs)
+    else:
+        y_real = pd.read_csv('test_label.csv').iloc[:,0]
+        model.fit(X, y)
+        y_pred = model.predict(X_test)
+        return y_pred, accuracy_score(y_real, y_pred)
+
+def display_clean_diff():
+    # TODO: show two subplots
+    pass
+
 
 
 # firstly load the data
 print 'Loading data...'
-train_X, train_y = fetch_data('./train.csv')
+train_X, train_y = fetch_data('./train_clean.csv')
 test_X = fetch_data('./test.csv', False)
 print 'Data loaded successfully'
 print '#'*80
 
 
 
-print 'Trying outlier detecting and filtering'
-lof = LocalOutlierFactor(500, metric='chebyshev', contamination='auto')
-train_X, train_y = outlier_filtering(lof, train_X, train_y)
-print train_X.shape[0], 'samples remain'
-print '#'*80
+# print 'Try to clean data...'
+#
+# print 'Trying outlier detecting and filtering'
+# lof = LocalOutlierFactor(100, metric='chebyshev', contamination='auto')
+# train_X, train_y = outlier_filtering(lof, train_X, train_y)
+# print train_X.shape[0], 'samples remain'
+# print '#'*80
+#
+# dump_data = pd.DataFrame(train_X, columns=['Attribute%d'%i for i in range(1,7)])
+# dump_data['Category'] = pd.Series(train_y)
+# dump_data.to_csv('train_clean.csv', index=False)
 
 
 
-print 'Print Lasso coefficient'
 lasso = Lasso(0.5).fit(train_X, train_y)
+print 'Print Lasso coefficient'
 print lasso.coef_.tolist()
-print 'Plot features histogram'
+# print 'Plot features histogram'
 # display_features(train_X)
 print '#'*80
-
-
-# with open('clean_train.csv', 'w') as w:
-#     w.write('Attribute1,Attribute2,Attribute3,Attribute4,Attribute5,Attribute6,Category\n')
-#     for i in range(train_X.shape[0]):
-#         info = ','.join(map(str, train_X[i]))
-#         info += ',{:d}\n'.format(train_y[i])
-#         w.write(info)
-# exit()
 
 
 # try to preprocess the features
@@ -110,7 +121,7 @@ print 'Try to preprocess data...'
 # print 'dimension reduction with primary component analysis'
 # pca = PCA(4)
 # train_X, test_X = data_transform(pca, train_X, train_y, test_X)
-
+#
 # print 'dimension reduction with linear discriminant analysis'
 # lda = LinearDiscriminantAnalysis()
 # train_X, test_X = data_transform(lda, train_X, train_y, test_X)
@@ -143,13 +154,8 @@ dtc = DecisionTreeClassifier(
 
 
 print 'Start evaluating model...'
-# score = cross_val_score(dtc, train_X, train_y, scoring='accuracy', cv=10)
-# print 'The average accuracy:', np.mean(score)
-real_y = pd.read_csv('test_label.csv').values.reshape(-1)
-dtc.fit(train_X, train_y)
-pred_y = dtc.predict(test_X)
-diff = (pred_y-real_y).astype(np.bool).sum()
-print 'The accuracy is', 1-diff/1000.0
+pred_y, acc = evaluate_accuracy(dtc, train_X, train_y, test_X)
+print 'The accuracy is', acc
 print '#'*80
 
 
@@ -157,10 +163,10 @@ print '#'*80
 
 # try to analyze the generalization issue
 
-label = 'lof_hyper_real'
+label = 'real_evaluate'
 
-# write_data(pred_y, label)
-# print 'Predicting data dumpped!'
+write_data(pred_y, label)
+print 'Predicting data dumpped!'
 
 # dot_data = sklearn.tree.export_graphviz(dtc, out_file=None)
 # graph = graphviz.Source(dot_data)
