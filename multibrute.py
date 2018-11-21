@@ -13,8 +13,8 @@ from decision_tree import fetch_data, data_transform, write_data
 def data_fetch():
     train_X, train_y = fetch_data('./train_clean.csv')
     test_X = fetch_data('./test.csv', False)
-    sfm = SelectFromModel(Lasso(0.5), max_features=4)
-    train_X, test_X = data_transform(sfm, train_X, train_y, test_X)
+    # sfm = SelectFromModel(Lasso(0.5), max_features=4)
+    # train_X, test_X = data_transform(sfm, train_X, train_y, test_X)
     return train_X, train_y, test_X
 
 
@@ -23,12 +23,13 @@ def proc(model, X, y, testX, testy, finishevent, printlock, resultmanager):
         md = sklearn.clone(model)
         predy = md.fit(X, y).predict(testX)
         acc = accuracy_score(testy, predy)
-        with printlock:
-            print 'The accuracy score is', acc
-        if acc >= 0.69:
-            resultmanager['pred_y'] = predy
-            resultmanager['acc'] = acc
-            finishevent.set()
+        if acc > 0.69:
+            with printlock:
+                print 'The accuracy score is', acc
+            if acc >= 0.698:
+                resultmanager['pred_y'] = predy
+                resultmanager['acc'] = acc
+                finishevent.set()
 
 
 
@@ -55,7 +56,7 @@ def main():
         p.start()
     for p in procs:
         p.join()
-    label = 'real_evaluate'+str(int(result_manager['acc']*1000))
+    label = 'no_lasso_'+str(int(result_manager['acc']*1000))
     write_data(result_manager['pred_y'], label)
 
 

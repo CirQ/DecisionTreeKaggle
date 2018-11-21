@@ -43,9 +43,9 @@ print 'Try to preprocess data...'
 # lda = LinearDiscriminantAnalysis()
 # train_X, test_X = data_transform(lda, train_X, train_y, test_X)
 
-print 'feature selection with lasso'
-sfm = SelectFromModel(Lasso(0.5), max_features=4)
-train_X, test_X = data_transform(sfm, train_X, train_y, test_X)
+# print 'feature selection with lasso'
+# sfm = SelectFromModel(Lasso(0.5), max_features=4)
+# train_X, test_X = data_transform(sfm, train_X, train_y, test_X)
 
 print 'After data preprocessing...'
 print train_X
