@@ -2,19 +2,15 @@ from multiprocessing import Process, Event, Lock, Manager, cpu_count
 
 import pandas as pd
 import sklearn
-from sklearn.feature_selection import SelectFromModel
-from sklearn.linear_model import Lasso
 from sklearn.metrics import accuracy_score
 from sklearn.tree import DecisionTreeClassifier
 
-from decision_tree import fetch_data, data_transform, write_data
+from decision_tree import fetch_data, write_data
 
 
 def data_fetch():
     train_X, train_y = fetch_data('./train_clean.csv')
     test_X = fetch_data('./test.csv', False)
-    # sfm = SelectFromModel(Lasso(0.5), max_features=4)
-    # train_X, test_X = data_transform(sfm, train_X, train_y, test_X)
     return train_X, train_y, test_X
 
 
@@ -26,10 +22,11 @@ def proc(model, X, y, testX, testy, finishevent, printlock, resultmanager):
         if acc > 0.69:
             with printlock:
                 print 'The accuracy score is', acc
-            if acc >= 0.698:
+            if acc >= 0.699:
                 resultmanager['pred_y'] = predy
                 resultmanager['acc'] = acc
                 finishevent.set()
+        del md, predy
 
 
 
@@ -56,7 +53,7 @@ def main():
         p.start()
     for p in procs:
         p.join()
-    label = 'no_lasso_'+str(int(result_manager['acc']*1000))
+    label = 'result/no_lasso_'+str(int(result_manager['acc']*1000))
     write_data(result_manager['pred_y'], label)
 
 

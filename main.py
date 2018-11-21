@@ -1,9 +1,9 @@
 from decision_tree import *
 
 
-print 'Displaying difference for data cleaning...'
-display_clean_diff()
-print '#'*80
+# print 'Displaying difference for data cleaning...'
+# display_clean_diff()
+# print '#'*80
 
 
 # firstly load the data
@@ -16,13 +16,13 @@ print '#'*80
 
 
 # print 'Try to clean data...'
-#
+
 # print 'Trying outlier detecting and filtering'
 # lof = LocalOutlierFactor(100, metric='chebyshev', contamination='auto')
 # train_X, train_y = outlier_filtering(lof, train_X, train_y)
 # print train_X.shape[0], 'samples remain'
 # print '#'*80
-#
+
 # dump_data = pd.DataFrame(train_X, columns=['Attribute%d'%i for i in range(1,7)])
 # dump_data['Category'] = pd.Series(train_y)
 # dump_data.to_csv('train_clean.csv', index=False)
@@ -43,7 +43,7 @@ print 'Try to preprocess data...'
 # print 'dimension reduction with primary component analysis'
 # pca = PCA(4)
 # train_X, test_X = data_transform(pca, train_X, train_y, test_X)
-#
+
 # print 'dimension reduction with linear discriminant analysis'
 # lda = LinearDiscriminantAnalysis()
 # train_X, test_X = data_transform(lda, train_X, train_y, test_X)
@@ -85,10 +85,10 @@ print '#'*80
 
 # try to analyze the generalization issue
 
-label = 'real_evaluate'
+label = '11849180-submission'
 
-# write_data(pred_y, label)
-# print 'Predicting data dumpped!'
+write_data(pred_y, label)
+print 'Predicting data dumpped!'
 
 # dot_data = sklearn.tree.export_graphviz(dtc, out_file=None)
 # graph = graphviz.Source(dot_data)

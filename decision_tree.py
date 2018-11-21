@@ -32,7 +32,7 @@ def data_transform(model, X, y, Xt):
     return model.transform(X), model.transform(Xt)
 
 def write_data(yhat, filename):
-    with open('result/{}.csv'.format(filename), 'w') as w:
+    with open('{}.csv'.format(filename), 'w') as w:
         w.write('Id,Category')
         for i, y in enumerate(yhat, start=1):
             w.write('\n{},{}'.format(i, int(y)))
