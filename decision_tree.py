@@ -77,5 +77,20 @@ def evaluate_accuracy(model, X, y, X_test=None):
         return y_pred, accuracy_score(y_real, y_pred)
 
 def display_clean_diff():
-    # TODO: show two subplots
-    pass
+    before_X, _ = fetch_data('train.csv')
+    after_X, _ = fetch_data('train_clean.csv')
+    fig, axes = plt.subplots(nrows=2, ncols=6, figsize=(20,5))
+    names = ['Attribute1', 'Attribute2', 'Attribute3', 'Attribute4', 'Attribute5', 'Attribute6']
+    for i, column in enumerate(before_X.T):
+        axes[0,i].hist(column)
+        axes[0,i].xaxis.set_major_locator(tic.MaxNLocator(3))
+        axes[0,i].yaxis.set_major_locator(tic.MaxNLocator(4))
+        axes[0,i].set_title('before #'+names[i])
+    for i, column in enumerate(after_X.T):
+        axes[1,i].hist(column)
+        axes[1,i].xaxis.set_major_locator(tic.MaxNLocator(3))
+        axes[1,i].yaxis.set_major_locator(tic.MaxNLocator(4))
+        axes[1,i].set_title('after #'+names[i])
+    fig.tight_layout()
+    fig.subplots_adjust(hspace=0.3, wspace=0.3)
+    plt.show()

@@ -1,6 +1,11 @@
 from decision_tree import *
 
 
+print 'Displaying difference for data cleaning...'
+display_clean_diff()
+print '#'*80
+
+
 # firstly load the data
 print 'Loading data...'
 train_X, train_y = fetch_data('./train_clean.csv')
@@ -24,12 +29,12 @@ print '#'*80
 
 
 
-lasso = Lasso(0.5).fit(train_X, train_y)
-print 'Print Lasso coefficient'
-print lasso.coef_.tolist()
+# lasso = Lasso(0.5).fit(train_X, train_y)
+# print 'Print Lasso coefficient'
+# print lasso.coef_.tolist()
 # print 'Plot features histogram'
 # display_features(train_X)
-print '#'*80
+# print '#'*80
 
 
 # try to preprocess the features
