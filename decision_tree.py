@@ -79,7 +79,7 @@ def evaluate_accuracy(model, X, y, X_test=None):
 def display_clean_diff():
     before_X, _ = fetch_data('train.csv')
     after_X, _ = fetch_data('train_clean.csv')
-    fig, axes = plt.subplots(nrows=2, ncols=6, figsize=(20,5))
+    fig, axes = plt.subplots(nrows=2, ncols=6, figsize=(20,6))
     names = ['Attribute1', 'Attribute2', 'Attribute3', 'Attribute4', 'Attribute5', 'Attribute6']
     for i, column in enumerate(before_X.T):
         axes[0,i].hist(column)
@@ -92,5 +92,5 @@ def display_clean_diff():
         axes[1,i].yaxis.set_major_locator(tic.MaxNLocator(4))
         axes[1,i].set_title('after #'+names[i])
     fig.tight_layout()
-    fig.subplots_adjust(hspace=0.3, wspace=0.3)
-    plt.show()
+    fig.subplots_adjust(hspace=0.7, wspace=0.2)
+    plt.savefig('data_clean.png', dpi=400)
